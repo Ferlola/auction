@@ -1,0 +1,25 @@
+<div class="mt-2" id="bid">
+  <div class="fw-bold mb-2">Make a bid</div>
+  <form method="post" action="">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group">
+        {{ field }}
+        {% if field.errors %}{{ field.errors }}{% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary mt-2">Bid</button>
+  </form>
+</div>
+<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<script>
+  window.setInterval(function() {
+    var start = new Date();
+    var expiry = new Date("{{date_time|safe}}")
+    if (start < expiry) {
+      $('#bid').show();
+    } else {
+      $('#bid').hide();
+    }
+  }, 0);
+</script>

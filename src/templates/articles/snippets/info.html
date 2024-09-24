@@ -1,0 +1,34 @@
+{% load bid_extras %}
+{% load static %}
+{% load article_extras %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet"
+          href="{% static 'css/weasyprint.css' %}"
+          type="text/css" />
+    <title>Info {{ article_pdf }}</title>
+  </head>
+  <body>
+    <div id="myDiv1">
+      <h2>Article</h2>
+      <h2>
+        {% for x in article %}<h3>{{ x.article }}</h3>{% endfor %}
+      </h2>
+    </div>
+    <div id="myDiv2">
+      <h2>Description</h2>
+      {% for x in description %}<h3>{{ x.description }}</h3>{% endfor %}
+    </div>
+    {% for x in images %}
+      <img src="/media/images/{{ x.image|get_image }}"
+           alt="{{ article_pdf }}"
+           id="image" />
+      <hr />
+    {% endfor %}
+  </body>
+</html>

@@ -1,0 +1,131 @@
+{% load static %}
+
+<link href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+      rel="stylesheet" />
+<div class="card h-100 text-center">
+  <h6 class="card-title">{{ article.category }} -> {{ article.subcategory }}</h6>
+  {% for image in article.imageupload_set.all|slice:'0:1' %}
+    <img src="{{ image.image.url }}"
+         class="img-fluid"
+         alt="{{ article.article }}"
+         width="auto"
+         style="max-height: 130px" />
+  {% endfor %}
+  <div style="display: inline-block; ">
+    {% if request.user.is_anonymous %}
+      <span id="like_count{{ article.pk }}" class="like_count mt-3 pl-2">{{ article.total_likes }}</span>
+      <a href="{% url 'account_login' %}">
+        <img src="{% static 'images/thumbup.jpg' %}"
+             alt="thumbup"
+             height="25"
+             width="25" />
+      </a>
+      <a href="{% url 'account_login' %}">
+        <img src="{% static 'images/thumbdown.jpg' %}"
+             alt="thumbdown"
+             height="25"
+             width="25" />
+      </a>
+      <span id="dislike_count{{ article.pk }}" class="like_count mt-3 pl-2">{{ article.total_dislikes }}</span>
+    {% else %}
+      <span id="like_count{{ article.pk }}" class="like_count mt-3 pl-2">{{ article.total_likes }}</span>
+      <button type="button"
+              id="{{ article.pk }}"
+              data-url="{% url 'articles:get_like' %}"
+              class="btn border-0 likebtn m-0 p-0">
+        <img src="{% static 'images/thumbup.jpg' %}"
+             alt="thumbup"
+             height="25"
+             width="25" />
+      </button>
+      <button type="button"
+              id="{{ article.pk }}"
+              data-url="{% url 'articles:get_dislike' %}"
+              class="btn border-0 likebtn1 m-0 p-0">
+        <img src="{% static 'images/thumbdown.jpg' %}"
+             alt="thumbdown"
+             height="25"
+             width="25" />
+      </button>
+      <span id="dislike_count{{ article.pk }}" class="dislike_count mt-3 pl-2">{{ article.total_dislikes }}</span>
+    {% endif %}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ article.article }}</h5>
+    <div>{{ article.description | truncatechars:20 }}</div>
+    <small>{#% lorem 1 p %#}</small>
+    <div class="fst-italic">{{ article.location }}</div>
+    <a href="{% url 'articles:article' article.slug %}"
+       class="btn btn-primary">Ver mas</a>
+    {% include 'articles/snippets/time_details.html' %}
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+<script src="{% static 'js/yscountdown.min.js' %}"></script>
+<script>
+  $(document).ready(function() {
+    $(".likebtn").click(function(event) {
+      //event.preventDefault()
+      var ansid = $(this).attr('id');
+      console.log(ansid)
+      $.ajax({
+        url: $(this).data('url'),
+        type: 'POST',
+        data: {
+          'article_id': ansid,
+          'csrfmiddlewaretoken': "{{ csrf_token }}",
+          'action': 'post'
+        },
+        dataType: 'json',
+        success: function(response) {
+          $('#like_count' + ansid).text(response['total_likes']);
+          $('#dislike_count' + ansid).text(response['total_dislikes']);
+
+          console.log(response)
+          if (response['flag']) {
+            $('#' + ansid).addClass('text-primary');
+          } else {
+            $('#' + ansid).removeClass('text-primary');
+          }
+        },
+        error: function(rs, e) {
+          console.log(rs.response)
+        }
+      });
+    });
+  });
+  $(document).ready(function() {
+    $(".likebtn1").click(function(event) {
+      //event.preventDefault()
+      var ansid1 = $(this).attr('id');
+      console.log(ansid1)
+      $.ajax({
+        url: $(this).data('url'),
+        type: 'POST',
+        data: {
+          'article_id': ansid1,
+          'csrfmiddlewaretoken': "{{ csrf_token }}",
+          'action': 'post1'
+        },
+        dataType: 'json',
+        success: function(response) {
+          $('#dislike_count' + ansid1).text(response['total_dislikes']);
+          $('#like_count' + ansid1).text(response['total_likes']);
+
+          console.log(response)
+          if (response['flag1']) {
+            $('#' + ansid1).addClass('text-primary');
+          } else {
+            $('#' + ansid1).removeClass('text-primary');
+          }
+        },
+        error: function(rs, e) {
+          console.log(rs.response)
+        }
+      });
+    });
+  });
+</script>

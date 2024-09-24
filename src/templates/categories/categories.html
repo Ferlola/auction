@@ -1,0 +1,82 @@
+{% load category_extras %}
+
+<body onload="startTime()"></body>
+{% if categories %}
+  <nav class="sidebar card py-2 mb-4 alert alert-secondary" id="category">
+    <div class="text-success h6" id="txt"></div>
+    <div class="h5" id="cat_h5">Categories</div>
+    <a href="{% url 'index' %}"
+       class="text-decoration-none fw-bold"
+       id="all">All articles: {{ num_articles }}</a>
+    <ul class="nav flex-column" id="nav_accordion">
+      <li class="nav-item has-submenu">
+        {% for cat in categories %}
+          <a class="nav-link"
+             id="all"
+             href="{% url 'categories:category' %}?q={{ cat }}">{{ cat }} ({{ cat|countcategory }})</a>
+          <ul class="submenu collapse">
+            {% for cata in cat.subcategory_set.all %}
+              <li>
+                <a class="nav-link"
+                   id="all"
+                   href="{% url 'categories:category' %}?q={{ cata }}">{{ cata }} ({{ cata|countsubcategory }})</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endfor %}
+      </li>
+    </ul>
+  </nav>
+{% else %}
+  <div class="alert alert-danger">
+    Please go to <a href="{% url 'adminauction:setting' %}" target="_blank">Settings</a> and add categories and subcategories.
+  </div>
+{% endif %}
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.sidebar .nav-link').forEach(function(element) {
+
+      element.addEventListener('click', function(e) {
+
+        let nextEl = element.nextElementSibling;
+        let parentEl = element.parentElement;
+
+        if (nextEl) {
+          e.preventDefault();
+          let mycollapse = new bootstrap.Collapse(nextEl);
+
+          if (nextEl.classList.contains('show')) {
+            mycollapse.hide();
+          } else {
+            mycollapse.show();
+            // find other submenus with class=show
+            var opened_submenu = parentEl.parentElement.querySelector('.submenu.show');
+            // if it exists, then close all of them
+            if (opened_submenu) {
+              new bootstrap.Collapse(opened_submenu);
+            }
+          }
+        }
+      }); // addEventListener
+    }) // forEach
+  });
+  ///////////////////////////////////////////
+
+  function startTime() {
+    const today = new Date();
+    let h = today.getHours();
+    let m = today.getMinutes();
+    let s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('txt').innerHTML = h + ":" + m + ":" + s;
+    setTimeout(startTime, 1000);
+  }
+
+  function checkTime(i) {
+    if (i < 10) {
+      i = "0" + i
+    }; // add zero in front of numbers < 10
+    return i;
+  }
+</script>

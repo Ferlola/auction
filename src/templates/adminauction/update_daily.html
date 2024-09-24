@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="article-form">
+    <div class="fw-bold text-center h3">Set daily report time</div>
+    <hr />
+    <form method="post">
+      {% csrf_token %}
+      {{ form }}
+      <button type="submit" class="btn btn-primary mt-2 mb-4">Create</button>
+    </form>
+    <a href="{% url 'adminauction:cron' %}">go back</a>
+  </div>
+{% endblock %}

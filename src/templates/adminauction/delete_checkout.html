@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load winner_extras %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="users-db">
+    {% if checkout %}
+      <div class="text-center fw-bold h2">Checkout</div>
+      {% for object in checkout %}
+        <div class="card w-75">
+          <div class="text-right">
+            <div class="card-header h4">
+              <span class="fw-bold">Article</span>: {{ object.article }}
+            </div>
+            <div class="card-header">
+              <span class="fw-bold">Bid:</span> {{ object.bid }} €
+            </div>
+            <div class="card-header">
+              <span class="fw-bold">Fee:</span> {{ object.bid_fee }} %
+            </div>
+            <div class="card-header">
+              <span class="fw-bold">Total:</span>  {{ object.bid_fee|get_fee:object.bid }} €
+            </div>
+            <div class="card-header">
+              <span class="fw-bold">User:</span>  {{ object.user }}
+            </div>
+            <div class="card-header">
+              <span class="fw-bold">Email:</span> {{ object.email }}
+            </div>
+            <div class="card-header">
+              <span class="fw-bold">Payment id:</span>  {{ object.payment_id }}
+            </div>
+            <div class="card-header">
+              <span class="fw-bold">Paid on:</span>  {{ object.paid_on }}
+            </div>
+            <div class="card-header text-center">
+              <a href="{% url 'adminauction:delete_checkoutt' object.pk %}"
+                 class="btn btn-danger badge">Delete</a>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4"></div>
+      {% endfor %}
+    {% else %}
+      <div class="text-center fw-bold h2">No checkout yet</div>
+    {% endif %}
+    <hr />
+    <a href="{% url 'adminauction:setting' %}">back</a>
+    <div class="mt-4"></div>
+  </div>
+{% endblock %}

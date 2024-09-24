@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="article-form">
+    <div class="text-center h2">Delete Category</div>
+    Are you sure to delete Category? <span class="fw-bold">{{ pk }}</span>
+    <div>
+      <a href="{% url 'adminauction:delete_category_done' pk %}"
+         class="btn btn-danger">Delete</a>
+      <a href="{% url 'adminauction:create_category' %}"
+         class="btn btn-primary">No</a>
+    </div>
+  </div>
+{% endblock %}

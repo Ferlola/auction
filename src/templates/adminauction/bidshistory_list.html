@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="users-db">
+    <div class="container-fluid">
+      <div class="row">{#% include 'messages.html' %#}</div>
+      <div class="h3 text-center">Bids history</div>
+      <div class="row">
+        {% comment %}
+    {% for record in user_history %}
+    <div class="card h-25">
+        <div class="card-body">
+            <div class="fw-bold">Article: <pan class="text-success"> {{ record.article }}</pan></div>
+            <div class="fw-bold">Bid: <pan class="text-success"> {{ record.bids}} €</pan></div>
+            <div class="fw-bold">Bid date: <pan class="text-success"> {{ record.bid_date}}</pan></div>
+        </div>
+    </div>
+    {% endfor %}
+        {% endcomment %}
+        {{ object.bids }}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">User</th>
+              <th scope="col">Article</th>
+              <th scope="col">Bid</th>
+              <th scope="col">Bid date</th>
+            </tr>
+          </thead>
+          {% for object in order_user %}
+            <tbody>
+              <tr>
+                <td>{{ object.user }}</td>
+                <td>{{ object }}</td>
+                <td>{{ object.bids }} €</td>
+                <td>{{ object.bid_date }}</td>
+              </tr>
+            </tbody>
+          {% endfor %}
+        </table>
+      </div>
+      {% if checkout %}
+        {% for object in checkout %}
+          <div class="mb-3">
+            <a href="{% url 'bids:pdf' article_pdf=object.article %}"
+               target="_blank"
+               class="btn btn-success">Download invoice {{ object.article }}</a>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <a href="{% url 'adminauction:setting' %}">back</a>
+  </div>
+{% endblock %}

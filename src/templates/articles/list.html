@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row mt-3">
+    <div class="col-3 col-md-2">
+      {% block category %}
+        {% include 'categories/categories.html' %}
+      {% endblock %}
+    </div>
+    <div class="col-9 col-md-10">
+      {% if message == 'empty' %}<div class="alert alert-danger">No articles found</div>{% endif %}
+      <div class="row">
+        {% for article in article_list %}
+          {% if article.setbidarticle.publish %}
+            <div class="col-12 col-md-3 mt-2">{% include 'articles/snippets/article.html' %}</div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

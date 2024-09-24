@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="article-form">
+    {% for x in fee %}
+      <div class="mb-1">
+        Actual Fee: <span class="fw-bold">{{ x.fee }} %</span>
+      </div>
+      <div class="mb-3">
+        Update on: <span class="fw-bold">{{ x.created }}</span>
+      </div>
+    {% endfor %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary mt-2">Save</button>
+    </form>
+    <div>
+      <a href="{% url 'adminauction:setting' %}">Go back</a>
+    </div>
+  </div>
+{% endblock %}

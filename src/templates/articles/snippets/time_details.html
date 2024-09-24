@@ -1,0 +1,39 @@
+{% load static %}
+
+{% if article.date_time < time_now %}
+  <div class="mb-4"></div>
+  <div class="text-danger">Auction finished</div>
+{% else %}
+  {% if article.from_date > day %}
+    <div class="text-success">Bid start:  {{ article.from_date }}</div>
+  {% else %}
+    <div class="text-success" id="counter{{ article.pk }}"></div>
+  {% endif %}
+{% endif %}
+<script src="{% static 'js/yscountdown.min.js' %}"></script>
+<script>
+  //function comparedate(){
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+  today = mm + '. ' + dd + ', ' + yyyy;
+  //document.write(today);
+  //}
+
+  var counterElement = document.querySelector("#counter{{article.pk}}");
+  var endDate = new Date("{{article.date_time|safe}}")
+  var myCountDown = new ysCountDown(endDate, function(remaining, finished) {
+    //var message = "";
+    if (finished) {
+      message = "Auction finished";
+    } else {
+      message = "";
+      message += remaining.totalDays + " days ";
+      message += remaining.hours + " hours ";
+      message += remaining.minutes + " minutes ";
+      message += remaining.seconds + " seconds ";
+    }
+    counterElement.textContent = message;
+  });
+</script>

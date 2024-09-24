@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="fw-bold h3">Subcategory: {{ object.name }}</div>
+  <div class="text-center fw-bold">
+    Keep in mind that if you configure the offers on article,
+    these will be added to the subcategory offers
+  </div>
+  <div class="text-success fw-bold">Type bid: {{ setbidsubcategory.get_set_bid_display }}</div>
+  {% if setbidsubcategory.type_bid %}
+    <div class="text-success fw-bold">Auto increment: {{ setbidsubcategory.bid_amount }}</div>
+  {% endif %}
+  <div class="text-success fw-bold">Update on: {{ setbidsubcategory.created }}</div>
+  <form method="post" id="bidForm">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group px-4">
+        {#{ field.auto_id}#}
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}<span class="text-danger">{{ field.errors }}</span>{% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary mt-2 mb-4">Save</button>
+  </form>
+  <div>
+    <a href="{% url 'adminauction:setting' %}">Go back</a>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+          type="text/javascript"></script>
+  <script>
+    function codeAddress() {
+      if (document.querySelector('input[name="set_bid"]:checked').value == '1') {
+        $('#id_bid_amount').hide();
+      } else {
+        $('#id_bid_amount').show();
+      }
+      $('#id_set_bid').click(function() {
+        if (document.querySelector('input[name="set_bid"]:checked').value == '1') {
+          $('#id_bid_amount').hide();
+
+        } else {
+          $('#id_bid_amount').show();
+        }
+      })
+    }
+    window.onload = codeAddress;
+  </script>
+{% endblock %}

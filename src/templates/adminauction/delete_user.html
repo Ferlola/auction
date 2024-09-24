@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="article-form">
+    <div class="text-center h2">Delete User</div>
+    Are you sure to delete User? <span class="fw-bold">{{ pk }}</span>
+    <div>
+      <a href="{% url 'adminauction:delete_user_done' pk %}"
+         class="btn btn-danger">Delete</a>
+      <a href="{% url 'adminauction:users_db' %}" class="btn btn-primary">No</a>
+    </div>
+  </div>
+{% endblock %}

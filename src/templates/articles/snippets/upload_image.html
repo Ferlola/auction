@@ -1,0 +1,18 @@
+<div class="mb-5">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group mt-3">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}{{ field.errors }}{% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary mt-2">Upload image</button>
+  </form>
+</div>
+{% if user.is_superuser %}
+  <a class="nav-link"
+     aria-current="page"
+     href="{% url 'adminauction:setting' %}">back</a>
+{% endif %}

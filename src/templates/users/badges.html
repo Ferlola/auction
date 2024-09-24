@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row mt-3">
+    <div class="col-3 col-md-2">
+      {% block category %}
+        {% include 'categories/categories.html' %}
+      {% endblock %}
+    </div>
+    <div class="col-9 col-md-10">
+      <div class="h3 mb-3 text-center">Badges</div>
+      <hr />
+      <div class="row mb-2">
+        <div class="col">
+          <img src="{{ less_5 }}" alt="badge" />
+        </div>
+        <div class="col">Users with 5 visits or more to the auction site</div>
+      </div>
+      <hr />
+      <div class="row mb-2">
+        <div class="col">
+          <img src="{{ less_10 }}" alt="badge" />
+        </div>
+        <div class="col">Users with 10 visits or more to the auction site</div>
+      </div>
+      <hr />
+      <div class="row mb-2">
+        <div class="col">
+          <img src="{{ less_15 }}" alt="badge" />
+        </div>
+        <div class="col">Users with 15 visits or more to the auction site</div>
+      </div>
+      <hr />
+      <div class="row mb-2">
+        <div class="col">
+          <img src="{{ has_article }}" alt="badge" />
+        </div>
+        <div class="col">Users who have currently posted articl/es</div>
+      </div>
+      <hr />
+      <div class="row mb-2">
+        <div class="col">
+          <img src="{{ has_bids }}" alt="badge" />
+        </div>
+        <div class="col">Users who have currently placed auction bids</div>
+      </div>
+      <hr />
+      <div class="row mb-2">
+        <div class="col">
+          <img src="{{ has_won_auction }}" alt="badge" />
+        </div>
+        <div class="col">Users who have won an auction</div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

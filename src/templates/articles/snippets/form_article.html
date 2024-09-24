@@ -1,0 +1,39 @@
+{% load static %}
+
+<form method="post"
+      enctype="multipart/form-data"
+      id="articleForm"
+      data-url="{% url 'articles:get_subcategory' %}"
+      action="{% url 'articles:create_article' %}"
+      novalidate>
+  {% csrf_token %}
+  {% for field in articleForm %}
+    <div class="form-group mb-2">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.errors %}<span class="text-danger">{{ field.errors }}</span>{% endif %}
+    </div>
+  {% endfor %}
+  <div class="form-group">
+    {{ imageForm.label_tag }}
+    {{ imageForm }}
+    {% if imageForm.errors %}<span class="text-danger">{{ imageForm.errors }}</span>{% endif %}
+  </div>
+  <button type="submit" class="btn btn-primary mt-2 mb-4">Create</button>
+</form>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  $("#id_category").change(function() {
+    var url = $("#articleForm").attr("data-url");
+    var categoryId = $(this).val();
+    $.ajax({
+      url: url,
+      data: {
+        'category': categoryId,
+      },
+      success: function(data) {
+        $('#id_subcategory').html(data);
+      }
+    });
+  });
+</script>

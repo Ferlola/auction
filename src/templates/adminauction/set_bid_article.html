@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="article-form">
+    <div class="fw-bold h3">Article: {{ articles.article }}</div>
+    <div class="text-success fw-bold">Article created: {{ object.created }}</div>
+    <div class="text-success fw-bold">Article from: {{ articles.from_date }}</div>
+    <div class="text-success fw-bold">Article until: {{ articles.date_time }}</div>
+    <div class="text-success fw-bold">Type bid: {{ bidarticle.get_set_bid_display }}</div>
+    {% if bidarticle.type_bid %}
+      {{ bitarticle.type_bid }}
+      <div class="text-success fw-bold">Auto increment: {{ bidarticle.bid_amount }}</div>
+    {% endif %}
+    <div class="text-success fw-bold">Published: {{ bidarticle.publish }}</div>
+    <div class="text-success fw-bold">Update on: {{ bidarticle.created }}</div>
+    <form method="post" id="bidForm">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group px-4">
+          {#{ field.auto_id}#}
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}<span class="text-danger">{{ field.errors }}</span>{% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary mt-2 mb-4">Update</button>
+    </form>
+    <div>
+      <a href="{% url 'adminauction:setting' %}">Go back</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            type="text/javascript"></script>
+    <script>
+      function codeAddress() {
+        if (document.querySelector('input[name="set_bid"]:checked').value == '1') {
+          $('#id_bid_amount').hide();
+        } else {
+          $('#id_bid_amount').show();
+        }
+        $('#id_set_bid').click(function() {
+          if (document.querySelector('input[name="set_bid"]:checked').value == '1') {
+            $('#id_bid_amount').hide();
+
+          } else {
+            $('#id_bid_amount').show();
+          }
+        })
+      }
+      window.onload = codeAddress;
+    </script>
+  </div>
+{% endblock %}

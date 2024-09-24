@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="alert alert-danger mt-3">
+    <div class="fw-bold card-title text-center">Site Settings</div>
+    <hr />
+    <div class="fw-bold text-center">
+      Last update:
+      {% for x in userpermission %}{{ x.created }}{% endfor %}
+    </div>
+    <div class="row">
+      <form method="post">
+        <div class="form-row">
+          {% csrf_token %}
+          <div class="col">
+            {% for x in userpermission %}
+              <div class="col">
+                <label for="site_name">Site name:</label>
+                <input type="text"
+                       name="site_name"
+                       id="id_site_name"
+                       value="{{ x.site_name }}" />
+              </div>
+              <div class="col">
+                <label for="domain">Domain:</label>
+                <input type="text" name="domain" id="id_domain" value="{{ x.domain }}" />
+              </div>
+              <div class="col">
+                <label for="id_theme">Site theme:</label>
+                <br />
+                <div style="padding:0px 75px;">
+                  {% if x.theme == 'L' %}
+                    <input type="radio" name="theme"  checked value="L" />
+                    Clear
+                  {% else %}
+                    <input type="radio" name="theme"  value="L" />
+                    Clear
+                  {% endif %}
+                  <br />
+                  {% if x.theme == 'D' %}
+                    <input type="radio" name="theme"  checked value="D" />
+                    Black
+                  {% else %}
+                    <input type="radio" name="theme"  value="D" />
+                    Black
+                  {% endif %}
+                  <br />
+                </div>
+              </div>
+              <div class="col">
+                <label for="id_article_update">Can the user update article?</label>
+                {% if x.article_update == True %}
+                  <input type="checkbox" name="article_update" id="id_article_update" checked />
+                {% else %}
+                  <input type="checkbox" name="article_update" id="id_article_update" />
+                {% endif %}
+              </div>
+            </div>
+            <div class="col">
+              <label for="choose_date_time" id="id_choose_date_time">Can the user choose auction dates and time?</label>
+              {% if x.choose_date_time == True %}
+                <input type="checkbox"
+                       name="choose_date_time"
+                       id="id_choose_date_time"
+                       checked />
+              {% else %}
+                <input type="checkbox" name="choose_date_time" id="id_choose_date_time" />
+              {% endif %}
+            </div>
+            <div class="col">
+              <label for="id_total_images">Maximun images upload:</label>
+              <input type="number"
+                     name="total_images"
+                     id="total_images"
+                     value="{{ x.total_images }}" />
+            </div>
+            <div class="col">
+              <button type="submit" class="btn btn-primary mt-2">Save</button>
+            </div>
+          {% endfor %}
+        </div>
+      </form>
+    </div>
+  </div>
+  <div Class="row">
+    <div class="col">
+      <div class="text-center">
+        <div class="alert alert-info">
+          <a href="{% url 'adminauction:create_category' %}">Create Category</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="text-center">
+        <div class="alert alert-info">
+          <a href="{% url 'adminauction:create_subcategory' %}">Create Subcategory</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="text-center">
+        <div class="alert alert-danger" role="alert">
+          <a href="{% url 'adminauction:fee' %}">Set fee's</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="text-center">
+        <div class="alert alert-danger" role="alert">
+          <a href="{% url 'adminauction:cron' %}">Set days and hours of reporting</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="text-center">
+        <div class="alert alert-info">
+          <a href="{% url 'adminauction:bids_history' %}">Bids history</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="text-center">
+        <div class="alert alert-danger">
+          <a href="{% url 'adminauction:delete_unsubcribe' %}">Unsubscribed</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="text-center">
+        <div class="alert alert-danger">
+          <a href="{% url 'adminauction:users_db' %}">Users</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="text-center">
+        <div class="alert alert-danger">
+          <a href="{% url 'adminauction:delete_checkout' %}">Checkout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if articles %}
+    <div class="row alert alert-success">
+      {% if not_published %}
+        <div class="text-center">
+          Unpublished:
+          <span class="text-danger">
+            {% for x in not_published %}{{ x }}&nbsp;{% endfor %}
+          </span>
+        </div>
+      {% endif %}
+      <div class="fw-bold card-title text-center">Articles settings</div>
+      {% for article in articles %}
+        <hr />
+        <div class="row">
+          <div class="col">
+            {% for image in article.imageupload_set.all|slice:'0:1' %}
+              <img src="{{ image.image.url }}"
+                   class="img-fluid img-thumbnail"
+                   alt="{{ article.article }}"
+                   width="auto"
+                   style="max-height: 130px" />
+            {% endfor %}
+          </div>
+          <div class="col">
+            <a href="{% url 'adminauction:article' article.pk %}"
+               class="btn btn-primary badge">Set bid and publish</a>
+            <a href="{% url 'adminauction:update_article' article.pk %}"
+               class="btn btn-primary badge">Edit article</a>
+            <a href="{% url 'articles:update_article' article.pk %}"
+               class="btn btn-primary badge">image management</a>
+            <a href="{% url 'adminauction:delete_article' article.slug %}"
+               class="btn btn-danger badge">Delete article</a>
+            <h5 class="card-title">{{ article.article }} -> {{ article.subcategory }} -> {{ article.category }}</h5>
+            <p class="card-text">
+              <span class="fw-bold">Description:</span>{{ article.description | truncatechars:25 }}
+            </p>
+            <small>{#% lorem 1 p %#}</small>
+            <div>
+              {{ article.date_time }}
+              {% if article.date_time < time_now %}<span class="text-danger">Finished</span>{% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center fw-bold">No articles yet</div>
+  {% endif %}
+  <div class="mb-5"></div>
+{% endblock %}

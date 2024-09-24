@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load article_extras %}
+
+{% block content %}
+  <div class="row mt-3">
+    <div class="col-3 col-md-2">
+      {% block category %}
+        {% include 'categories/categories.html' %}
+      {% endblock %}
+    </div>
+    <div class="col-9 col-md-10">
+      <div class="row">
+        <div id="download"   class="col-2">
+          <a href="{% url 'articles:pdf' article.id %}"
+             target="_blank"
+             class="btn btn-success">Download {{ article }}</a>
+        </div>
+        <div class="col-10">
+          <h1 class="text-center">{{ article.article }}</h1>
+        </div>
+      </div>
+      <div class="col">
+        <hr />
+        <div class="row mb-2">{% include 'articles/snippets/slideshow.html' %}</div>
+        <hr />
+        <div class="row mb-5">
+          <div id="info"   class="col-12 col-md-4">
+            <div class="fst-italic">From: {{ article.from_date }}</div>
+            <div class="fst-italic">To: {{ article.date_time }}</div>
+            {% if not date_time_left and not article.from_date > day %}
+              {% if article.reserved %}<div class="text-danger fw-bold">Reserved price</div>{% endif %}
+              {% if not article.reserved %}<div class="text-success fw-bold">No reserved price</div>{% endif %}
+              {% comment %}<div class="">info temp, precio reserva {{ article.reserved }}</div>{% endcomment %}
+              {% for bid in actualBid.values %}
+                {% if bid != None %}
+                  {% if article.reserved > bid %}
+                    <div class="text-danger fw-bold">Price reserved no reached</div>
+                  {% else %}
+                    {% if article.reserved %}<div class="text-success fw-bold">Price reserved reached</div>{% endif %}
+                  {% endif %}
+                  <div class="h5 fw-bold">
+                    Actual Bid <span class="text-danger">{{ bid }}</span>€
+                  </div>
+                {% endif %}
+              {% endfor %}
+              <div class="h5 fw-bold">
+                Total Bids: <span class="text-success">{{ count }}</span>times
+              </div>
+              <div id="ask">
+                <a href="{% url 'contact:ask_seller' article.article %}"
+                   class="btn btn-primary">Ask the seller</a>
+              </div>
+            {% endif %}
+            {% comment %}
+        <div class=""> Creo la subasta : {{ article.user.name }} ID: {{ article.user.id }} </div>
+        <div class=""> Usuario registrado: {{ user.username }} ID: {{ request.user.id }} </div>
+        <div class=""> Articulo: {{ article.article }}</div>
+            {% endcomment %}
+          </div>
+          <div class="col-12 col-md-8">
+            {% if article.from_date > day %}
+              <div class="h4 text-success">Bid start {{ article.from_date }}</div>
+            {% else %}
+              {% include 'articles/snippets/time_details.html' %}
+            {% endif %}
+            {% if request.user.id != article.user.id %}
+              {% if not date_time_left and not article.from_date > day %}
+                {% if article.get_bid %}
+                  {% for bid in actualBid.values %}
+                    <div id="bid">
+                      {% if not bid %}
+                        <a href="{% url 'articles:setted_bids' article.slug %}"
+                           class="btn btn-primary mt-2">Next bid  {{ article.get_bid }} €</a>
+                      {% else %}
+                        <a href="{% url 'articles:setted_bids' article.slug %}"
+                           class="btn btn-primary mt-2">Next bid  {{ article.get_bid|add:bid }} €</a>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  {% include 'articles/snippets/bids.html' %}
+                {% endif %}
+              {% endif %}
+              {% if request.user.is_winner %}
+                {% if request.user.not_has_paid %}
+                  <div>
+                    <div class="fw-bold h3 text-success">Congratulations!</div>
+                    <div class="h4">{{ request.user }}</div>
+                    {% for x in request.user.not_paid %}
+                      <div class="h4">You won de article: {{ x|not_paid_article }}</div>
+                      <div class="h4">With : {{ x|not_paid_bid }} Bids</div>
+                    {% endfor %}
+                    <div>
+                      <a href="{% url 'winner:winner' article.article %}"
+                         class="btn btn-primary">Next</a>
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div id="location"  class="row text-center mb-5">
+        <div class="fw-bold">Location:</div>
+        <div>
+          <p>
+            <smal>{{ article.location }}</smal>
+          </p>
+        </div>
+        <div class="fw-bold">Description:</div>
+        <div>{{ article.description }}</div>
+      </div>
+    </div>
+  </div>
+  <div id="finished" class="row text-center mb-5">
+    <div class="fw-bold h4">Auction finished</div>
+  </div>
+  <div class="row  mb-5"></div>
+  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+  <script>
+    window.setInterval(function() {
+      var start = new Date();
+      var expiry = new Date("{{date_time|safe}}")
+      if (start < expiry) {
+        $('#bid').show();
+        $('#ask').show();
+        $('#info').show();
+        $('#location').show();
+        $('#download').show();
+        $('#finished').hide();
+      } else {
+        $('#bid').hide();
+        $('#ask').hide();
+        $('#info').hide();
+        $('#download').hide();
+        $('#location').hide();
+        $('#finished').show();
+      }
+    }, 0);
+  </script>
+{% endblock %}

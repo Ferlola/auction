@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="article-form">
+    <div class="fw-bold text-center h3">Unsubscribed users</div>
+    <div class="row flex">
+      <div class="col-1 fw-bold">Username</div>
+      <div class="col-1"></div>
+    </div>
+    <hr />
+    {% for object in object_list %}
+      <div class="row flex">
+        <div class="col-1">{{ object.user }}</div>
+        <div class="col-1">
+          <a href="{% url 'adminauction:delete_unsubscribed' object.pk %}"
+             class="btn btn-danger badge">Delete</a>
+        </div>
+      </div>
+      <hr />
+    {% endfor %}
+    <a href="{% url 'adminauction:setting' %}">back</a>
+  </div>
+{% endblock %}

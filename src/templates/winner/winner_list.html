@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load winner_extras %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <h1 class="text-center">List of items you won at auction</h1>
+      {% for w in object %}
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Article: {{ w.article }}</h4>
+            <p class="card-text">Price: {{ w.bid }} €</p>
+            {% for x in fee %}
+              <p class="card-text">Fee: {{ x|get_decimal }} %</p>
+              <p class="card-text">Total: {{ x|get_fee:w.bid }} €</p>
+            {% endfor %}
+          </div>
+          <div class="card-footer d-flex">
+            {% if w.has_paid %}
+              <span class="text-success">The article is already paid on {{ w.created_at }}</span>
+            {% else %}
+              <a href="{% url 'winner:detail' w.id %}" class="btn btn-success ml-auto">Checkout</a>
+            {% endif %}
+            {% if request.user.has_paid %}
+              {% for x in created %}<span class="text-success">The article is already paid on {{ x.created_at }}</span>{% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

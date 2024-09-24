@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="article-form">
+    <div class="fw-bold text-center h3">Categories</div>
+    {% if category %}
+      <div class="mb-3">
+        Actual Categories: <span class="fw-bold">
+        {% for x in category %}
+          <br />
+          {{ x.name }}<a href="{% url 'adminauction:delete_category' x.pk %}"
+   class="btn btn-danger badge">Delete</a>
+        {% endfor %}
+      </span>
+    </div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary mt-2">Create Category</button>
+  </form>
+  <div>
+    <a href="{% url 'adminauction:setting' %}">Go back</a>
+  </div>
+</div>
+{% endblock %}

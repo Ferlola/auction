@@ -1,0 +1,62 @@
+{% if not article.imageupload_set.all|length > 1 %}
+  {% for image in article.imageupload_set.all %}
+    <div style="max-width:800px;position:relative;margin:0 auto;">
+      <img src="{{ image.image.url }}"
+           class="img-fluid"
+           alt="{{ article.article }}"
+           width="auto"
+           height="600px" />
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="w3-content"
+       style="max-width:600px;
+              position:relative;
+              margin:0 auto">
+    {% for image in article.imageupload_set.all %}
+      <div class="mySlides">
+        <img src="{{ image.image.url }}"
+             class="img-fluid img-thumbnail"
+             alt="{{ article.article }}"
+             width="auto"
+             height="600px" />
+      </div>
+    {% endfor %}
+    <!-- Next and previous buttons -->
+    <a class="btn btn-primary badge"
+       style="position:absolute;
+              top:45%;
+              left:0"
+       onclick="plusDivs(-1)">❮</a>
+    <a class="btn btn-primary badge"
+       style="position:absolute;
+              top:45%;
+              right:0"
+       onclick="plusDivs(1)">❯</a>
+  </div>
+{% endif %}
+<br />
+<script>
+  var slideIndex = 1;
+  showDivs(slideIndex);
+
+  function plusDivs(n) {
+    showDivs(slideIndex += n);
+  }
+
+  function showDivs(n) {
+    var i;
+    var x = document.getElementsByClassName("mySlides");
+    if (n > x.length) {
+      slideIndex = 1
+    }
+    if (n < 1) {
+      slideIndex = x.length
+    };
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+
+    x[slideIndex - 1].style.display = "block";
+  }
+</script>

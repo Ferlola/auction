@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row mt-3">
+    <div class="col-3 col-md-2">
+      {% block category %}
+        {#% include 'categories/categories.html' %#}
+      {% endblock %}
+    </div>
+    <div class="col-9 col-md-10 article-form">
+      <div class="h1">Contact Form</div>
+      <div class="h3">Hello {{ user }}</div>
+      <form action method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <div>
+            <label for="category" class="form-label">Please select subcategory:</label>
+          </div>
+          <select name="category" class="category">
+            {% for category in categories %}<option value="{{ category }}">{{ category }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="message" class="form-label">Details of the matter:</label>
+          <textarea name="message" class="form-control" id="message"rows="4"></textarea>
+        </div>
+        <div>
+          <button class="btn btn-success" type="submit">Send</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

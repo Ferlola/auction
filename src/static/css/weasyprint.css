@@ -1,0 +1,43 @@
+body {
+    font-family: sans-serif;
+  }
+  @media print {
+    a::after {
+      content: " (" attr(href) ") ";
+    }
+    pre {
+      white-space: pre-wrap;
+    }
+    @page {
+      width: 900px;
+      margin: 0;
+      size: Letter;
+      @top-right {
+        content:  counter(page);
+      }
+    }
+    @page :first {
+      @top-right {
+        content: "";
+      }
+    }
+  }
+  @media only screen and (max-width: 500px){
+    .responsive {
+      width: 50%;
+    }
+  }
+
+  #image {
+    width: 100%;
+  }
+  #myDiv1 {
+    background-color: antiquewhite;
+    text-align: center;
+    font-size: 1.0em;
+  }
+  #myDiv2 {
+    background-color: rgb(211, 236, 236);
+    text-align: center;
+    font-size: 1.0em;
+  }

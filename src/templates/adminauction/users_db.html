@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="users-db">
+    <div class="row flex">
+      <div class="col-1 fw-bold">Id</div>
+      <div class="col-1 fw-bold">Username</div>
+      <div class="col-2 fw-bold">email</div>
+      <div class="col-3 fw-bold">date Joined</div>
+      <div class="col-3 fw-bold">Last join</div>
+      <div class="col-1 fw-bold">login amount</div>
+      <div class="col-1"></div>
+    </div>
+    <hr />
+    {% for object in users %}
+      <div class="row flex">
+        <div class="col-1">{{ object.id }}</div>
+        <div class="col-1">{{ object.username }}</div>
+        <div class="col-2">{{ object.email }}</div>
+        <div class="col-3">{{ object.date_joined }}</div>
+        <div class="col-3">{{ object.last_login }}</div>
+        <div class="col-1">{{ object.login_amount }}</div>
+        <div class="col-1">
+          <a href="{% url 'adminauction:delete_user' object.pk %}"
+             class="btn btn-danger badge">Delete</a>
+        </div>
+      </div>
+      <hr />
+    {% endfor %}
+    <a href="{% url 'adminauction:setting' %}">back</a>
+  </div>
+{% endblock %}

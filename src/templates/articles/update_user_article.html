@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="article-form">
+    {#% if not user.is_superuser%#}
+    {% for x in userpermission %}
+      {% if x.article_update %}
+        <div class="h3">Editar articulo</div>
+        <hr />
+        <div class="col">
+          <div class="h5 fw-bold">Article:</div>
+          <p class="fst-italic h3">{{ article.article }}</p>
+          <div>
+            <a href="{% url 'articles:update' article.pk %}"
+               class="btn btn-primary badge">Editar</a>
+          </div>
+          <hr />
+        {% else %}
+          <div class="h3">Upload more images</div>
+        {% endif %}
+      {% endfor %}
+      {#% endif %#}
+      <div class="card h-100">
+        {% for image in article.imageupload_set.all %}
+          <div class="card-body">
+            <div class="col-sm-2">
+              <img src="{{ image.image.url }}" alt="image"  width="40%" height="40%" />
+              {% if image.one_image %}
+                <a href="{% url 'articles:delete_image' image.id %}"
+                   class="btn btn-danger badge">Delete</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {{ images|length }}/
+      {% for x in userpermission %}
+        {{ x.total_images }}
+        {% if x.total_images > images|length %}
+          <div class="col-4">{% include 'articles/snippets/upload_image.html' %}</div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+          crossorigin="anonymous" />
+    <title>news articles</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="card card-body bg-grey">
+        <div class="row">
+          <div class="row">
+            <img class="img-fluid" src="cid:{{ logo }}" alt="logo" />
+          </div>
+          <div class="row">
+            <p>Weekly report</p>
+            <p>Hello Admin</p>
+            {% if new_articles %}
+              <p>Last week articles for auction</p>
+              {% for article in new_articles %}<p>Article: {{ article }}, Category: {{ article.category }}</p>{% endfor %}
+            {% else %}
+              <p>Not new articles</p>
+            {% endif %}
+            {% if paid_articles %}
+              <p>Last week checkout articles</p>
+              {% for article in paid_articles %}
+                <p>Article: {{ article }}, Bid: {{ article.bid }}, Paid on: {{ article.paid_on }}</p>
+              {% endfor %}
+            {% else %}
+              <p>Not articles checkout</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+  </body>
+</html>

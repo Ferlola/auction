@@ -1,0 +1,25 @@
+
+@import url('project.css') screen and (max-width: 1768px);
+
+
+@media (max-width: 1768px) {
+  .navbar.bg-light {
+    background-color: rgba(255, 255, 255) !important;
+  }
+ .navbar-light .navbar-nav .nav-link {
+    color: rgb(11, 82, 233)!important;
+  }
+  .navbar-light .navbar-brand  {
+    color: rgb(11, 82, 233)!important;
+  }
+
+}
+
+
+#category {
+  background-color: rgba(255, 255, 255) !important;
+}
+
+#cat_h5 {
+  color:rgb(0,0,0)!important;
+}

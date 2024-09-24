@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="users-db">
+    <div class="text-center h2">Crontab</div>
+    {% for x in schedule %}
+      {% if x.day_of_week == '*' %}Day : All --{% endif %}
+      {% if x.day_of_week == '0' %}Day : Sunday --{% endif %}
+      {% if x.day_of_week == '1' %}Day: Monday --{% endif %}
+      {% if x.day_of_week == '2' %}Day: Tuesday --{% endif %}
+      {% if x.day_of_week == '3' %}Day: Wednesday --{% endif %}
+      {% if x.day_of_week == '4' %}Day: Thrusday --{% endif %}
+      {% if x.day_of_week == '5' %}Day: Friday --{% endif %}
+      {% if x.day_of_week == '6' %}Day: Saturday --{% endif %}
+      Hour: {{ x.hour }} --
+      Minute: {{ x.minute }} -- <a href="{% url 'adminauction:delete_crontab' x.id %}"
+    class="badge bg-danger">Delete</a>
+      <br />
+    {% endfor %}
+    <div class="text-center h2">Periodic Tasks</div>
+    {% for x in periodic %}
+      {% if x.enabled == True %}
+        <span class="text-success">Enabled Task:</span>
+        {{ x }} <a href="{% url 'adminauction:disable_periodic' x.id %}"
+    class="badge bg-secondary">Disable</a>
+        <a href="{% url 'adminauction:delete_periodic' x.id %}"
+           class="badge bg-danger">Delete</a>
+      {% endif %}
+      {% if x.enabled == False %}
+        <span class="text-danger">Disabled Task:</span>
+        {{ x }}<a href="{% url 'adminauction:enable_periodic' x.id %}"
+   class="badge bg-primary">Enable</a>
+        <a href="{% url 'adminauction:delete_periodic' x.id %}"
+           class="badge bg-danger">Delete</a>
+      {% endif %}
+      <br />
+    {% endfor %}
+    <br />
+    <h5>
+      <a href="{% url 'adminauction:set_weekly_report' %}"
+         class="btn btn-secondary">Set day and time for weekly report</a>
+    </h5>
+    <h5>
+      <a href="{% url 'adminauction:set_daily_report' %}"
+         class="btn btn-secondary">Set daily report time</a>
+    </h5>
+    <br />
+    <a href="{% url 'adminauction:setting' %}">Go back</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="col-10 article-form">
+    <h2>Post article</h2>
+    {% include 'articles/snippets/form_article.html' with message='Create' %}
+  </div>
+{% endblock %}

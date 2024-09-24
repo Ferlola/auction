@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="col mb-5">
+    <div class="h3">Select article</div>
+    <hr />
+    {% for article in article_list %}
+      <div class="row">
+        <div class="col-6">
+          {% for image in article.imageupload_set.all|slice:'0:1' %}
+            <img src="{{ image.image.url }}"
+                 class="img-fluid"
+                 alt="{{ article.article }}" />
+          {% endfor %}
+        </div>
+        <div class="col">
+          <h5 class="card-title">{{ article.article }}</h5>
+          <p class="card-text">{{ article.description | truncatechars:255 }}</p>
+          <small>{#% lorem 1 p %#}</small>
+          <a href="{% url 'articles:update_article' article.pk %}"
+             class="btn btn-primary">Select</a>
+        </div>
+      </div>
+      <hr />
+    {% endfor %}
+  </div>
+{% endblock %}

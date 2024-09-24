@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="alert alert-info text-center"
+       style="width:500px;
+              margin:0 auto;
+              text-align: center">
+    Article created for auction, after reviewing it will be published,
+    once published, you can upload more images.
+  </div>
+{% endblock %}

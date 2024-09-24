@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="col article-form">{% include 'articles/snippets/update_form_article.html' %}</div>
+{% endblock %}

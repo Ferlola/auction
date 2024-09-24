@@ -1,0 +1,85 @@
+{% load bid_extras %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+          crossorigin="anonymous" />
+    <title>Invoice {{ title }}</title>
+    <style>
+      .myDiv1 {
+        background-color: lightblue;
+        text-align: center;
+      }
+
+      .myDiv2 {
+        background-color: rgb(220, 216, 226);
+        font-family: "Times New Roman", Times, serif;
+        text-align: center;
+      }
+
+      .myDiv3 {
+        background-color: blanchedalmond;
+        text-align: center;
+      }
+
+      .myDiv4 {
+        border: 1px solid black;
+      }
+
+      .myDiv5 {
+        font-family: "Times New Roman", Times, serif;
+
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="myDiv1">
+        <h2>Invoice article: {{ title }}</h2>
+      </div>
+      <div class="myDiv2">
+        {% for date in created %}<h3>Date Invoice: {{ date }}</h3>{% endfor %}
+      </div>
+      <div class="myDiv3">Invoice number:{{ id|get_value_user }}</div>
+      <div class="myDiv4">Customer: {{ user|get_value_user }}</div>
+      <div class="mt-5">
+        <div class="row">
+          <div class="col-10 fw-bold">Bids</div>
+          <div class="col-2 fw-bold">{{ bids }}€</div>
+          <hr />
+        </div>
+        <div class="row">
+          <div class="col-10 fw-bold">Fee</div>
+          <div class="col-2 fw-bold">{{ fee }}%</div>
+          <hr />
+        </div>
+        <div class="row">
+          <div class="col-10 fw-bold">Total</div>
+          <div class="col-2 fw-bold">{{ total }}€</div>
+          <hr />
+        </div>
+        <div class="row">
+          <div class="col-10 fw-bold">Paid</div>
+          <div class="col-2 fw-bold">{{ has_paid|get_value_paid }}</div>
+          <hr />
+        </div>
+        {% if has_paid %}
+          <div class="row">
+            <div class="col-8 fw-bold">Paid on</div>
+            {% for paid in paid_on %}<div class="col-4 myDiv5">{{ paid }}</div>{% endfor %}
+            <hr />
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+  </body>
+</html>

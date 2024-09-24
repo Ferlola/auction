@@ -1,0 +1,12 @@
+{% load static %}
+
+<footer style=" bottom: 0; width: 100%;">
+  <div class="text-center mb-2">
+    {% comment %}
+        <a href="articles/sitemap.xml" target="_blank" class="text-decoration-none">Sitemap</a>
+    {% endcomment %}
+    <a href="{#% url 'feed' %#}" target="_blank" width="40" height="40">
+      <img src="{% static 'images/rss.webp' %}" alt="image feed" />
+    </a>
+  </div>
+</footer>

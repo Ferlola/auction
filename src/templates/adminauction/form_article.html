@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="article-form">
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group mb-2">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}<span class="text-danger">{{ field.errors }}</span>{% endif %}
+        </div>
+      {% endfor %}
+      <div class="form-group">
+        {{ imageForm.label_tag }}
+        {{ imageForm }}
+        {% if imageForm.errors %}<span class="text-danger">{{ imageForm.errors }}</span>{% endif %}
+      </div>
+      <button type="submit" class="btn btn-primary mt-2 mb-4">Update article</button>
+    </form>
+    <div>
+      <a href="{% url 'adminauction:setting' %}">Go back</a>
+    </div>
+  </div>
+{% endblock %}

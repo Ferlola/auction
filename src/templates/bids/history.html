@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <div class="users-db">
+    <div class="h3">Bids history</div>
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Article</th>
+            <th scope="col">Bid</th>
+            <th scope="col">Bid date</th>
+          </tr>
+        </thead>
+        {% for record in user_history %}
+          <tbody>
+            <tr>
+              <td>{{ record.article }}</td>
+              <td>{{ record.bids }} €</td>
+              <td>{{ record.bid_date }}</td>
+            </tr>
+          </tbody>
+        {% endfor %}
+      </table>
+    </div>
+    {% if request.user.has_checkout %}
+      {% for article in request.user.has_checkout %}
+        <div class="mb-3">
+          <a href="{% url 'bids:pdf' article_pdf=article %}"
+             target="_blank"
+             class="btn btn-success">Download invoice {{ article }}</a>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+{% endblock %}

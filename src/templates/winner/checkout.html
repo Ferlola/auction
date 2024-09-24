@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block category %}
+  {% include 'categories/categories.html' %}
+{% endblock %}
+{% block content %}
+  <form action="{% url 'winner:checkout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="paypal-button">
+      <span class="paypal-button-title">Buy now with</span>
+      <span class="paypal-logo">
+        <i>Pay</i><i>Pal</i>
+      </span>
+    </button>
+  </form>
+{% endblock %}

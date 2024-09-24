@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="fw-bold">{{ obj }}</div>
+  <div class="fw-bold">{{ obj1 }}</div>
+  <div class="fw-bold">{{ obj2 }}</div>
+  <div class="fw-bold">
+    {% for o in l %}{{ o }}{% endfor %}
+  </div>
+  <div class="fw-bold">
+    {% for i in x %}{{ i }}{% endfor %}
+    {{ y }}
+  </div>
+{% endblock% }

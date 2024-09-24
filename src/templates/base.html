@@ -1,0 +1,191 @@
+{% load static i18n %}
+{% load static %}
+
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>
+      {% block title %}
+        {{ title }}
+      {% endblock title %}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Auction Project" />
+    <meta name="author" content="Fernando Lozano" />
+    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+    {% block css %}
+      <!-- Latest compiled and minified Bootstrap CSS -->
+      <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
+            integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer" />
+      <!-- Your stuff: Third-party CSS libraries go here -->
+      <!-- This file stores project-specific CSS -->
+      <link href="{% static 'css/project.css' %}" rel="stylesheet" />
+      {% for x in themes %}
+        {% if x.theme == 'D' %}
+          <link rel="stylesheet" href="{% static 'css/dark.css' %}" type="text/css" />
+        {% else %}
+          <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+        {% endif %}
+      {% endfor %}
+    {% endblock css %}
+    <!-- Le javascript
+    ================================================== -->
+    {# Placed at the top of the document so pages load faster with defer #}
+    {% block javascript %}
+      <!-- Bootstrap JS -->
+      <script defer
+              src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"
+              integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g=="
+              crossorigin="anonymous"
+              referrerpolicy="no-referrer"></script>
+      <!-- Your stuff: Third-party javascript libraries go here -->
+      <!-- place project specific Javascript in this file -->
+      <script defer src="{% static 'js/project.js' %}"></script>
+    {% endblock javascript %}
+  </head>
+  <body class="{% block bodyclass %}{% endblock bodyclass %}">
+    {% block body %}
+      <div class="mb-1">
+        <div id="logo">
+          <img src="{% static 'images/logo.png' %}"
+               class="img-fluid"
+               alt="logo"
+               width="auto"
+               style="max-height: 200px" />
+        </div>
+        <!-- navbar -->
+        {% for x in themes %}
+          {% if x.theme == 'L' %}
+            <nav class="navbar navbar-expand-md bg-light navbar-light">
+            {% else %}
+              <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+              {% endif %}
+            {% endfor %}
+            <div class="container-fluid">
+              <a class="navbar-brand" href="{% url 'index' %}">
+                {% for x in site_name %}{{ x.site_name }}{% endfor %}
+              </a>
+              <button class="navbar-toggler"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#navbarSupportedContent"
+                      aria-controls="navbarSupportedContent"
+                      aria-expanded="false"
+                      aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  {% if not request.user.is_authenticated %}
+                    <li class="nav-item">
+                      <a class="nav-link active"
+                         aria-current="page"
+                         href="{% url 'account_login' %}">Login</a>
+                    </li>
+                  {% endif %}
+                  {% if request.user.is_authenticated %}
+                    <!-- <li class="nav-link"></li>-->
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle"
+                         href="#"
+                         id="navbarDropdown"
+                         role="button"
+                         data-bs-toggle="dropdown"
+                         aria-expanded="false">
+                        <span class="far fa-user" style="font-size:18px">{{ user.username }}</span>
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                          <a class="dropdown-item" href="{% url 'articles:create_article' %}">Post Article</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item"
+                             href="{% url 'users:detail' request.user.username %}">{% translate "My Profile" %}</a>
+                        </li>
+                        {% if request.user.has_article %}
+                          <li>
+                            <a class="dropdown-item" href="{% url 'articles:list' %}">Update article</a>
+                          </li>
+                        {% endif %}
+                        {% if request.user.has_bids %}
+                          <li>
+                            <a class="dropdown-item" href="{% url 'bids:history' %}">Bids history</a>
+                          </li>
+                        {% endif %}
+                        <li>
+                          <a class="dropdown-item" href="{% url 'users:badges' %}">Badges</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="{% url 'contact:contact' %}">Contact form</a>
+                        </li>
+                        <li>
+                          <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                          <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="navbar-brand">
+                      <img src="{{ user_badges }}" alt="user badges" />
+                      {% if request.user.has_bids %}<img src="{{ has_bids }}" alt="image has bids" />{% endif %}
+                      {% if request.user.has_article %}<img src="{{ has_article }}" alt="image has article" />{% endif %}
+                      {% if request.user.has_won_auction %}<img src="{{ has_won_auction }}" alt="image has won" />{% endif %}
+                    </li>
+                    {% if user.is_superuser %}
+                      <ul class="navbar-nav">
+                        <li class="nav-item">
+                          <a class="nav-link"
+                             aria-current="page"
+                             href="{% url 'adminauction:setting' %}">Settings</a>
+                        </li>
+                      </ul>
+                    {% endif %}
+                  {% endif %}
+                </ul>
+                <form class="d-flex" action="{% url 'articles:search' %}">
+                  <input class="form-control me-2"
+                         type="text"
+                         name="q"
+                         value="{{ query }}"
+                         placeholder="Search"
+                         aria-label="Search" />
+                </form>
+              </div>
+            </div>
+            {% for x in themes %}
+              {% if x.theme == 'L' %}
+              </nav>
+            {% else %}
+            </nav>
+          {% endif %}
+        {% endfor %}
+        <div class="container-fluid">
+          {% include 'messages.html' %}
+          {% block main %}
+            {% block content %}{% endblock %}
+            {% if is_paginated %}
+              {% include 'pagination.html' %}
+            {% endif %}
+            {% include 'footer.html' %}
+          {% endblock main %}
+        </div>
+      </div>
+    {% endblock body %}
+    <!-- /container -->
+    {% block modal %}
+    {% endblock modal %}
+    {% block inline_javascript %}
+      <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+              integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+              crossorigin="anonymous"></script>
+    {% endblock inline_javascript %}
+  </body>
+</html>
