@@ -2,6 +2,6 @@
 # ------------------------------------------------------------------------------
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
-POSTGRES_DB=cookie_auction
+POSTGRES_DB=auction
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=Burjassot
+POSTGRES_PASSWORD=your_postgres_password
