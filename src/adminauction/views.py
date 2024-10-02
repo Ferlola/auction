@@ -1,10 +1,10 @@
 import datetime
 from pathlib import Path
-from typing import Any
 
 from django.contrib import messages
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sites.models import Site
 from django.http import HttpResponseRedirect
@@ -39,7 +39,11 @@ from src.users.models import Unsubscribe
 from src.winner.models import CheckoutDone
 
 
-class UpdateArticle(SuccessMessageMixin, UpdateView):
+class SuperuserRequiredMixin(PermissionRequiredMixin):
+    permission_required = "is_superuser"
+
+
+class UpdateArticle(SuperuserRequiredMixin, SuccessMessageMixin, UpdateView):
     login_url = "account_login"
     model = Article
     form_class = AuctionForm
@@ -55,7 +59,7 @@ class UpdateArticle(SuccessMessageMixin, UpdateView):
         return context
 
 
-class CategoryView(CreateView):
+class CategoryView(SuperuserRequiredMixin, CreateView):
     login_url = "account_login"
     form_class = CategoryForm
     model = Category
@@ -79,7 +83,7 @@ class CategoryView(CreateView):
         return None
 
 
-class SubcategoryView(CreateView):
+class SubcategoryView(SuperuserRequiredMixin, CreateView):
     login_url = "account_login"
     form_class = SubcategoryForm
     model = Subcategory
@@ -104,7 +108,7 @@ class SubcategoryView(CreateView):
         return None
 
 
-class FeeView(CreateView):
+class FeeView(SuperuserRequiredMixin, CreateView):
     login_url = "account_login"
     form_class = FeeForm
     model = FeeArticle
@@ -129,7 +133,7 @@ class FeeView(CreateView):
         return None
 
 
-class PermissionUpdateArticle(CreateView):
+class PermissionUpdateArticle(SuperuserRequiredMixin, CreateView):
     login_url = "account_login"
     form_class = PermissionForm
     template_name = "adminauction/settings.html"
@@ -137,7 +141,7 @@ class PermissionUpdateArticle(CreateView):
     def get_success_url(self):
         return reverse("adminauction:setting")
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["time_now"] = timezone.now()
         if not FeeArticle.objects.exists():
@@ -181,7 +185,7 @@ class PermissionUpdateArticle(CreateView):
         return None
 
 
-class BidArticle(SuccessMessageMixin, UpdateView):
+class BidArticle(SuperuserRequiredMixin, UpdateView):
     login_url = "account_login"
     model = SetBidArticle
     form_class = SetBidarticleForm
@@ -195,7 +199,7 @@ class BidArticle(SuccessMessageMixin, UpdateView):
     def get_success_url(self, **kwargs):
         return reverse("adminauction:article", kwargs={"pk": self.kwargs["pk"]})
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["articles"] = Article.objects.get(pk=self.kwargs["pk"])
         if SetBidArticle.objects.exists():
@@ -252,12 +256,12 @@ class BidArticle(SuccessMessageMixin, UpdateView):
         )
 
 
-class BidsHistoryView(ListView):
+class BidsHistoryView(SuperuserRequiredMixin, ListView):
     login_url = "account_login"
     model = BidsHistory
     template_name = "adminauction/bidshistory_list.html"
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         from src.bids.models import BidsHistory as History
 
@@ -267,56 +271,56 @@ class BidsHistoryView(ListView):
         return context
 
 
-class DeleteUnsubscribedDB(ListView):
+class DeleteUnsubscribedDB(SuperuserRequiredMixin, ListView):
     login_url = "account_login"
     model = Unsubscribe
     template_name = "adminauction/delete_unsubscribe.html"
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Unsubscribed"
         return context
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_unsubcribed(request, pk):
     Unsubscribe.objects.filter(pk=pk).delete()
     messages.success(request, "User unsubscribed  Deleted Successfuly")
     return redirect("adminauction:delete_unsubcribe")
 
 
-class UsersDb(ListView):
+class UsersDb(SuperuserRequiredMixin, ListView):
     login_url = "account_login"
     model = get_user_model()
     template_name = "adminauction/users_db.html"
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["users"] = get_user_model().objects.all().exclude(is_superuser=1)
         context["title"] = "Users"
         return context
 
 
-class DeleteCheckoutDB(ListView):
+class DeleteCheckoutDB(SuperuserRequiredMixin, ListView):
     login_url = "account_login"
     model = CheckoutDone
     template_name = "adminauction/delete_checkout.html"
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["checkout"] = CheckoutDone.objects.all()
         context["title"] = "Checkout"
         return context
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_checkoutdone_db(request, pk):
     CheckoutDone.objects.filter(pk=pk).delete()
     messages.success(request, " Checkout deleted Successfuly")
     return redirect("adminauction:delete_checkout")
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_article(request, slug):
     article = Article.objects.get(slug=slug)
     if Article.objects.get(slug=slug):
@@ -326,7 +330,7 @@ def delete_article(request, slug):
     return None
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_article_done(request, slug):
     article = Article.objects.get(slug=slug)
     if Article.objects.values("article").exists():
@@ -344,42 +348,42 @@ def delete_article_done(request, slug):
     return redirect("adminauction:setting")
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_category(request, pk):
     category = Category.objects.get(pk=pk)
     pk = category.name
     return render(request, "adminauction/delete_category.html", {"pk": pk})
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_category_done(request, pk):
     Category.objects.filter(name=pk).delete()
     messages.success(request, "Category deleted Successfuly")
     return redirect("adminauction:create_category")
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_subcategory(request, pk):
     subcategory = Subcategory.objects.get(pk=pk)
     pk = subcategory.name
     return render(request, "adminauction/delete_subcategory.html", {"pk": pk})
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_subcategory_done(request, pk):
     Subcategory.objects.filter(name=pk).delete()
     messages.success(request, "Subcategory deleted Successfuly")
     return redirect("adminauction:create_subcategory")
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_user(request, pk):
     user = get_user_model().objects.get(pk=pk)
     pk = user.name
     return render(request, "adminauction/delete_user.html", {"pk": pk})
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_user_done(request, pk):
     user = get_user_model().objects.get(name=pk)
 
@@ -395,7 +399,7 @@ def delete_user_done(request, pk):
     return redirect("adminauction:users_db")
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def cron(request):
     schedule = CrontabSchedule.objects.all()
     periodic = PeriodicTask.objects.all()
@@ -406,7 +410,7 @@ def cron(request):
     )
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def set_weekly_report(request):
     form = CrontabWeeklyForm(request.POST)
     if request.method == "POST":
@@ -433,7 +437,7 @@ def set_weekly_report(request):
     return render(request, "adminauction/update_weekly.html", {"form": form})
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def set_daily_report(request):
     form = CrontabDailyForm(request.POST)
     if request.method == "POST":
@@ -459,7 +463,7 @@ def set_daily_report(request):
     return render(request, "adminauction/update_daily.html", {"form": form})
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def disable_periodic(request, pk):
     periodic = PeriodicTask.objects.get(id=pk)
     periodic.enabled = False
@@ -467,7 +471,7 @@ def disable_periodic(request, pk):
     return HttpResponseRedirect("/adminauction/cron/")
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def enable_periodic(request, pk):
     periodic = PeriodicTask.objects.get(id=pk)
     periodic.enabled = True
@@ -475,14 +479,14 @@ def enable_periodic(request, pk):
     return HttpResponseRedirect("/adminauction/cron/")
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_periodic(request, pk):
     periodic = PeriodicTask.objects.get(id=pk)
     periodic.delete()
     return HttpResponseRedirect("/adminauction/cron/")
 
 
-@staff_member_required
+@permission_required("is_superuser")
 def delete_crontab(request, pk):
     if CrontabSchedule.objects.get(id=pk):
         CrontabSchedule.objects.get(id=pk).delete()
