@@ -9,7 +9,7 @@
   <a href="README.md#-installation">Installation</a>
 </p>
 
-
+Contributions are welcome! ❤️
 ### 🔍 <span style="color: blue;">Requirements</span>:
 --------------------------------------------------------
 - virtual environment (highly recommended)<br />
@@ -23,7 +23,7 @@
 ---------------------------------------------------------
 - Open a terminal window in your favorite folder and clone project.
 ```
-$ git clone https://www.github.com/ferlola/auction.git
+$ git clone https://www.github.com/Ferlola/auction.git
 ```
 <details>
     <summary> .envs/.local/.django file configuration. </summary>
@@ -123,6 +123,3 @@ $ source .venv/bin/activate
 (.venv) $ deactivate
 $
 ```
-
-
-<p align="center"><img width=60% src="https://github.com/ferlola/auction/src/static/images/logo.png"></p>
