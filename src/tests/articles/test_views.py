@@ -51,7 +51,7 @@ def test_article_update(create_article):
     )
     assert http_client.OK, resp.status_code
     assert resp.status_code == 302  # noqa:PLR2004
-    assert resp.templates == "/accounts/login/?next=/articles/update_article/1"
+    assert resp["Location"] == "/accounts/login/?next=/articles/update_article/1"
 
 
 @pytest.mark.django_db()
@@ -59,7 +59,7 @@ def test_update(create_article):
     resp = client.get(reverse("articles:update", kwargs={"pk": create_article.pk}))
     assert http_client.OK, resp.status_code
     assert resp.status_code == 302  # noqa:PLR2004
-    assert resp.templates == "/accounts/login/?next=/articles/update/1"
+    assert resp["Location"] == "/accounts/login/?next=/articles/update/1"
 
 
 def test_search():
@@ -72,7 +72,7 @@ def test_redirect_to_login(client):
     resp = client.get(reverse("articles:create_article"))
     assert resp.status_code == 302  # noqa:PLR2004
     assert http_client.OK, resp.status_code
-    assert resp.templates == "/accounts/login/?next=/articles/create_article"
+    assert resp["Location"] == "/accounts/login/?next=/articles/create_article"
 
 
 @pytest.mark.django_db()
@@ -101,4 +101,4 @@ def test_delete_image(create_image):
     resp = client.get(reverse("articles:delete_image", kwargs={"pk": create_image.pk}))
     assert resp.status_code, http_client.OK
     assert resp.status_code == 302  # noqa:PLR2004
-    assert resp.templates == "/accounts/login/?next=/articles/delete_image/1"
+    assert resp["Location"] == "/accounts/login/?next=/articles/delete_image/1"
