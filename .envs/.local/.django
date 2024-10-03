@@ -29,9 +29,9 @@ EMAIL_USE_TLS = True
 #EMAIL_TIMEOUT = None
 
 #PORT=8000
-#PAYPAL_CLIENT_ID = your_client_id
-#PAYPAL_SECRET_ID = your_secret_id
+PAYPAL_CLIENT_ID = your_client_id
+PAYPAL_SECRET_ID = your_secret_id
 
 # stripe
-#STRIPE_SECRET_KEY = 'your_secret_key'
-#STRIPE_PUBLIC_KEY = 'your_public_key'
+STRIPE_SECRET_KEY = 'your_secret_key'
+STRIPE_PUBLIC_KEY = 'your_public_key'
