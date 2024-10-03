@@ -315,7 +315,10 @@ def setted_bids(request, slug):
 
     total = total_amount if bids == "None" else int(bids) + total_amount
 
+    BidsHistory.objects.create(bids=total, article_id=article, user=request.user)
+
     if not BidsWinner.objects.filter(article__in=article).exists():
+        article = Article.objects.get(slug=slug)
         BidsWinner.objects.create(
             user=request.user,  # type: ignore[misc]
             article=article,

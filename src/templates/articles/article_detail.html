@@ -63,7 +63,7 @@
             {% if article.from_date > day %}
               <div class="h4 text-success">Bid start {{ article.from_date }}</div>
             {% else %}
-              {% include 'articles/snippets/time_details.html' %}
+              <div class="text-success fw-bold" id="counter"></div>
             {% endif %}
             {% if request.user.id != article.user.id %}
               {% if not date_time_left and not article.from_date > day %}
@@ -120,7 +120,33 @@
   </div>
   <div class="row  mb-5"></div>
   <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+  <script src="{% static 'js/yscountdown.min.js' %}"></script>
   <script>
+    //function comparedate(){
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    today = mm + '. ' + dd + ', ' + yyyy;
+    //document.write(today);
+    //}
+
+    var counterElement = document.querySelector("#counter");
+    var endDate = new Date("{{date_time|safe}}")
+    var myCountDown = new ysCountDown(endDate, function(remaining, finished) {
+      var message = "";
+      if (finished) {
+        message = "Auction finished";
+      } else {
+        message = "Time left:  ";
+        message += remaining.totalDays + " days ";
+        message += remaining.hours + " hours ";
+        message += remaining.minutes + " minutes ";
+        message += remaining.seconds + " seconds ";
+      }
+      counterElement.textContent = message;
+    });
+
     window.setInterval(function() {
       var start = new Date();
       var expiry = new Date("{{date_time|safe}}")
