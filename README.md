@@ -71,7 +71,8 @@ POSTGRES_PASSWORD=your_password  # change your_password with your real password
 ### 🚀 <span style="color: blue;">Installation</span>:
 - Create virtual environment.
 ```
-$ python3 -m venv .venv
+# change 'python3.12' with your python version
+$ python3.12 -m venv .venv
 ```
 
 - Activate virtual environment.
