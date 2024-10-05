@@ -12,11 +12,6 @@
     </div>
     <div class="col-9 col-md-10">
       <div class="row">
-        <div id="download"   class="col-2">
-          <a href="{% url 'articles:pdf' article.id %}"
-             target="_blank"
-             class="btn btn-success">Download {{ article }}</a>
-        </div>
         <div class="col-10">
           <h1 class="text-center">{{ article.article }}</h1>
         </div>
@@ -47,6 +42,11 @@
               {% endfor %}
               <div class="h5 fw-bold">
                 Total Bids: <span class="text-success">{{ count }}</span>times
+              </div>
+              <div id="download"class="mb-2">
+                <a href="{% url 'articles:pdf' article.id %}"
+                   target="_blank"
+                   class="btn btn-success">Download {{ article }}</a>
               </div>
               <div id="ask">
                 <a href="{% url 'contact:ask_seller' article.article %}"
