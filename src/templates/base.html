@@ -25,13 +25,14 @@
             referrerpolicy="no-referrer" />
       <!-- Your stuff: Third-party CSS libraries go here -->
       <!-- This file stores project-specific CSS -->
-      <link href="{% static 'css/project.css' %}" rel="stylesheet" />
       {% for x in themes %}
-        {% if x.theme == 'D' %}
-          <link rel="stylesheet" href="{% static 'css/dark.css' %}" type="text/css" />
-        {% else %}
+        {% if x.theme == 'L' %}
           <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+        {% else %}
+          <link rel="stylesheet" href="{% static 'css/dark.css' %}" type="text/css" />
         {% endif %}
+      {% empty %}
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
       {% endfor %}
     {% endblock css %}
     <!-- Le javascript
@@ -133,7 +134,6 @@
                       </ul>
                     </li>
                     <li class="navbar-brand">
-                      <img src="{{ user_badges }}" alt="user badges" />
                       {% if request.user.has_bids %}<img src="{{ has_bids }}" alt="image has bids" />{% endif %}
                       {% if request.user.has_article %}<img src="{{ has_article }}" alt="image has article" />{% endif %}
                       {% if request.user.has_won_auction %}<img src="{{ has_won_auction }}" alt="image has won" />{% endif %}
@@ -165,6 +165,11 @@
             {% else %}
             </nav>
           {% endif %}
+        {% empty %}
+          <div class="container-fluid">
+            <a class="fw-bold" href="{% url 'index' %}">Home</a>
+            <a class="fw-bold" href="{% url 'account_login' %}">Login</a>
+          </div>
         {% endfor %}
         <div class="container-fluid">
           {% include 'messages.html' %}
