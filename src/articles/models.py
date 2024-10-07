@@ -16,6 +16,7 @@ from django.db.models import IntegerField
 from django.db.models import ManyToManyField
 from django.db.models import SlugField
 from django.db.models.signals import pre_save
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from meta.models import ModelMeta
@@ -89,22 +90,9 @@ class Article(ModelMeta, models.Model):
             return bid_amount
         return None
 
-    """ @property
-    def date_time_left(self):
-        return  self.date_time < timezone.now() """
-
-    """     @property
-    def day_to_finish(self):
-        return self.date_time < (timezone.now() + timedelta(days=1))
-
-    @property
-    def hour_to_finish(self):
-        return self.date_time < (timezone.now() + timedelta(hours=1)) """
-
-    """ @property
-    def total_images(self):
-        self.total_images = UserPermission.objects.all()
-        return  self.total_images """
+    def days_to_finish(self):
+        days = str(self.date_time - timezone.now())
+        return days.split(",", 1)[0]
 
     @property
     def total_likes(self):
