@@ -1,8 +1,6 @@
-{% load static %}
-
 {% if article.date_time < time_now %}
   <div class="text-danger">
-    Finished at:
+    Auction finished at:
     <br />
     {{ article.date_time }}
     <br />
@@ -10,18 +8,17 @@
   <div class="text-success">See other more articles</div>
 {% endif %}
 {% if article.from_date > day %}
-  <div class="text_info">{{ article.date_time }}</div>
   <div class="text-info">
-    {{ article.date_time }}
+    Auction start:
     <br />
-    Bid start:  {{ article.from_date }}
+    {{ article.from_date }}
   </div>
+  <div class="text-success">See other more articles</div>
 {% endif %}
-{% if article.date_time > time_now %}
+{% if article.date_time > time_now and article.from_date <= day %}
   <div class="text-success">
-    Ends at:
     <br />
-    {{ article.date_time }}
+    {{ article.days_to_finish }} left
     <br />
     Bid now!
   </div>
