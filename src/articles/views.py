@@ -44,6 +44,7 @@ from src.bids.models import BidsHistory
 from src.bids.models import BidsWinner
 from src.categories.models import Category
 from src.categories.models import Subcategory
+from src.winner.models import CheckoutDone
 from src.winner.views import get_winner
 
 
@@ -141,9 +142,16 @@ class ArticleListView(ListView):
             context["message"] = "Articles list"
         context["num_articles"] = Article.objects.filter(publish=True).count()
         context["categories"] = Category.objects.annotate(items_count=Count("article"))
+
         context["title"] = "Articles List"
         context["time_now"] = timezone.now()
         context["article"] = Article.objects.all()
+        article_list = context["article"]
+        for article in article_list:
+            if CheckoutDone.objects.filter(article=article):
+                context["checkout_done"] = str(
+                    CheckoutDone.objects.filter(article=article).values("slug")
+                )[21:-4]
         context["day"] = timezone.localtime(timezone.now()).date()
         context["setbidarticle"] = SetBidArticle.objects.values("id")
         context["no_bids"] = no_bids()
@@ -222,6 +230,8 @@ class ArticleDetailView(MetadataMixin, FormMixin, DetailView):
         context["actualBid"] = BidsHistory.objects.filter(
             article=context["object"],
         ).aggregate(Max("bids"))
+        if CheckoutDone.objects.filter(article=context["object"]).exists():
+            context["checkout_done"] = True
         context["date_time"] = self.object.date_time
         context["day"] = timezone.localtime(timezone.now()).date()
         context["get_winner"] = get_winner()
