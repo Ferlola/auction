@@ -1,11 +1,8 @@
-{% if article.date_time < time_now %}
+{% if article.date_time < time_now or article.slug == checkout_done %}
   <div class="text-danger">
-    Auction finished at:
-    <br />
-    {{ article.date_time }}
+    Auction finished
     <br />
   </div>
-  <div class="text-success">See other more articles</div>
 {% endif %}
 {% if article.from_date > day %}
   <div class="text-info">
@@ -13,13 +10,10 @@
     <br />
     {{ article.from_date }}
   </div>
-  <div class="text-success">See other more articles</div>
 {% endif %}
-{% if article.date_time > time_now and article.from_date <= day %}
+{% if article.date_time > time_now and article.from_date <= day and not article.slug == checkout_done %}
   <div class="text-success">
+    {{ article.days_to_finish }} hours  left
     <br />
-    {{ article.days_to_finish }} left
-    <br />
-    Bid now!
   </div>
 {% endif %}
