@@ -92,7 +92,7 @@ class Article(ModelMeta, models.Model):
 
     def days_to_finish(self):
         days = str(self.date_time - timezone.now())
-        return days.split(",", 1)[0]
+        return days[0:-13]
 
     @property
     def total_likes(self):
