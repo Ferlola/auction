@@ -5,6 +5,7 @@ from src.winner import views
 app_name = "winner"
 
 urlpatterns = [
+    path("buy_now/<id>/", views.buy_now, name="buy_now"),
     path("winner/<str>", views.WinnerListView.as_view(), name="winner"),
     path("detail/<id>/", views.WinnerDetailView.as_view(), name="detail"),
     path("success/", views.PaymentSuccessView.as_view(), name="success"),
