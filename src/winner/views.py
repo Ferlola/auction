@@ -1,11 +1,13 @@
 import paypalrestsdk
 import stripe
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http.response import HttpResponseNotFound
 from django.http.response import HttpResponseRedirect
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
@@ -18,6 +20,7 @@ from paypalrestsdk import Payment
 
 from src.adminauction.models import FeeArticle
 from src.articles.models import Article
+from src.bids.models import BidsHistory
 from src.bids.models import BidsWinner
 from src.users.models import User
 from src.winner.mails import send_winner
@@ -100,6 +103,30 @@ def get_winner():
                             user_id=user_id,
                             slug=slug,
                         )
+
+
+def buy_now(request, pk):
+    article = Article.objects.get(id=pk)
+    user = request.user
+    email = user.email
+    user_id = user.id
+    slug = article.slug
+    bid = article.reserved
+    if not CheckoutDone.objects.filter(slug=slug).exists():
+        bid_fee = FeeArticle.objects.values_list("fee", flat=True)
+        bid_fee = float(str(bid_fee)[20:-4])
+        CheckoutDone.objects.create(
+            article=article,
+            bid=bid,
+            bid_fee=bid_fee,
+            email=email,
+            user_id=user_id,
+            slug=slug,
+        )
+    BidsHistory.objects.create(bids=bid, article_id=article.id, user=user)
+    messages.success(request, "Bid done")
+    send_winner(bid, article, user_id, email, slug)
+    return redirect("articles:article", slug=slug)
 
 
 class WinnerListView(ListView):
