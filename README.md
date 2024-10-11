@@ -5,12 +5,68 @@
 [![CI](https://github.com/Ferlola/auction/actions/workflows/ci.yml/badge.svg)](https://github.com/Ferlola/auction/actions/workflows/ci.yml)
 
 <p align="center">
+  <a href="README.md#-features">Features</a> 🔸
   <a href="README.md#-requirements">Requirements</a> 🔸
   <a href="README.md#-configuration">Configuration</a> 🔸
   <a href="README.md#-installation">Installation</a>
 </p>
 
 Contributions are welcome! ❤️
+
+### 📈 <span style="color: blue;">Purpose</span>:
+------------------------------------------------------
+This is a personal project with the purpose to improve my skills with Django, as I was building it I was adding more features and for now this is the result, I really appreciate if someone is interested in contributing to this project, as it helps me improve my skills.<br />
+If I can also help someone in some way with this project, all the better.<br />
+
+Fernando Lozano<br />
+fer.lozano10@hotmail.com
+
+### 📎 <span style="color: blue;">Features</span>:
+-------------------------------------------------------
+#### Control Panel.
+- Set site name.
+- Set site domain.
+- Set site theme.
+- Set if auctioneer can update item.
+- Set if auctioneer can choose start and end date.
+- Set maximum number of image uploads.
+- Set auto-increment of bids or let bidder choose bid amount for each item.
+- Set rate.
+- Set day and time of weekly email report of new items and completed payments.
+- Set time of daily email report of new items and completed payments.
+- Create and delete categories.
+- Create and delete subcategories.
+- Update and delete items.
+- Get bidding history.
+- Get list of unsubscribed to newsletters.
+- Get list of registered users.
+- Get payments details of winning bidders.
+#### Users.
+- Search field for items, categories and subcategories.
+- Automatic creation of pdf invoice.
+- Download of item details on pdf.
+- Get bidding history.
+- Seller inquiry form about the item.
+- Admin inquiry form.
+- Buy now option.
+- Slideshow.
+- Profile settings.
+- Forgot passsword.
+- Auction end countdown.
+- User badges.
+- Like and dislike button.
+- Email to confirm email address when user registers.
+- Email to admin to review item before posting.
+- Email to bidder to confirm bid.
+- Email to seller to inform about new bid.
+- Email to other bidders about last bid on the same item.
+- Email informing bidder that they have won the auction.
+- Email to seller if item has not had any bids, when auction has ended.
+- Email to all registered users with information about new items.
+- Payments via Stripe.
+- Payments via Paypal.
+
+
 ### 🔍 <span style="color: blue;">Requirements</span>:
 --------------------------------------------------------
 - virtual environment (highly recommended)<br />
