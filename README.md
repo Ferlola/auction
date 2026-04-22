@@ -18,9 +18,6 @@ Contributions are welcome! ❤️
 This is a personal project with the purpose to improve my skills with Django, as I was building it I was adding more features and for now this is the result, I really appreciate if someone is interested in contributing to this project, as it helps me improve my skills.<br />
 If I can also help someone in some way with this project, all the better.<br />
 
-Fernando Lozano<br />
-fer.lozano10@hotmail.com
-
 ### 📎 <span style="color: blue;">Features</span>:
 -------------------------------------------------------
 #### Control Panel.
